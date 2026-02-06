@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ariful Islam Koushik | Portfolio</title>
+  <title>Koushik | Assistant Director @ Chaldal</title>
+  <link rel="shortcut icon" href="assets/favicon.svg" type="image/x-icon">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -13,7 +14,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
+  <div class="main-container">
   <!-- HERO -->
   <header class="hero">
     <div class="hero-orb hero-orb--one"></div>
@@ -31,17 +32,26 @@
           <a href="#contact">Contact</a>
         </div>
       </nav>
-      <p class="eyebrow">Portfolio · Dhaka, Bangladesh</p>
-      <h1>Ariful Islam Koushik</h1>
-      <p class="subtitle">
-        Product Operations & Technical Operations Leader
-      </p>
-      <p class="hero-text">
-        Building scalable systems, smooth workflows, and reliable operations.
-      </p>
-      <div class="hero-actions">
-        <a href="#contact" class="btn">Contact Me</a>
-        <a href="#projects" class="btn ghost">View Projects</a>
+      <div class="hero-intro">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            Portfolio · Dhaka, Bangladesh · <span id="local-time" aria-live="polite"></span>
+          </p>
+          <h1>Ariful Islam Koushik</h1>
+          <p class="subtitle">
+            Product Operations & Technical Operations Leader
+          </p>
+          <p class="hero-text">
+            Building scalable systems, smooth workflows, and reliable operations.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn">Contact Me</a>
+            <a href="#projects" class="btn ghost">View Projects</a>
+          </div>
+        </div>
+        <div class="hero-photo">
+          <img src="assets/profile.png" alt="Ariful Islam Koushik" loading="lazy" />
+        </div>
       </div>
       <div class="hero-stats">
         <div class="stat-card">
@@ -256,8 +266,10 @@
   </main>
 
   <footer class="footer">
-    <p>© 2026 Ariful Islam Koushik</p>
+    <p>© <span id="year"></span> Ariful Islam Koushik</p>
   </footer>
 
+  <script src="script.js"></script>
+  </div>
 </body>
 </html>

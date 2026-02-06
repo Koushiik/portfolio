@@ -32,6 +32,12 @@ a {
   text-decoration: none;
 }
 
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
 .container {
   max-width: 1100px;
   margin: 0 auto;
@@ -41,6 +47,7 @@ a {
 .section {
   padding: 4rem 0;
   animation: rise 0.8s ease both;
+  border-radius: 18px;
 }
 
 .bg-light {
@@ -65,6 +72,7 @@ a {
     linear-gradient(135deg, #0a0f1f, #1b264c 55%, #0f172a);
   color: var(--text);
   padding: 4.5rem 0 5.5rem;
+  border-radius: 18px;
 }
 
 .hero .container {
@@ -106,6 +114,14 @@ a {
   width: 100%;
 }
 
+.nav-links a.active::after {
+  width: 100%;
+}
+
+.nav-links a.active {
+  color: var(--text);
+}
+
 .logo-badge {
   font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
   background: rgba(255, 255, 255, 0.1);
@@ -125,7 +141,7 @@ a {
 }
 
 .hero h1 {
-  font-size: clamp(2.5rem, 6vw, 4.25rem);
+  font-size: clamp(2.5rem, 6vw, 3.8rem);
   line-height: 1.05;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -142,6 +158,30 @@ a {
   max-width: 640px;
   margin: 1.5rem 0 2rem;
   color: rgba(255, 255, 255, 0.85);
+}
+
+.hero-intro {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-copy {
+  max-width: 640px;
+}
+
+.hero-photo {
+  display: flex;
+  justify-content: center;
+}
+
+.hero-photo img {
+  width: min(320px, 80vw);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 24px 50px rgba(8, 13, 28, 0.35);
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.06);
 }
 
 .btn {
@@ -211,19 +251,19 @@ a {
   height: 360px;
   border-radius: 50%;
   filter: blur(0);
-  opacity: 0.7;
+  opacity: 0.2;
   animation: float 10s ease-in-out infinite;
 }
 
 .hero-orb--one {
-  top: -120px;
-  right: -80px;
+  top: 0px;
+  right: 0px;
   background: radial-gradient(circle, rgba(110, 231, 255, 0.5), transparent 70%);
 }
 
 .hero-orb--two {
-  bottom: -140px;
-  left: -120px;
+  bottom: 0px;
+  left: 0px;
   background: radial-gradient(circle, rgba(248, 167, 255, 0.45), transparent 70%);
   animation-delay: -3s;
 }
@@ -334,6 +374,14 @@ a {
 }
 
 @media (min-width: 1024px) {
+  .hero-intro {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+
+  .hero-photo {
+    justify-content: flex-end;
+  }
+
   .grid {
     grid-template-columns: repeat(3, 1fr);
   }
