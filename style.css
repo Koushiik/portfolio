@@ -354,6 +354,85 @@ a {
   padding-left: 1rem;
 }
 
+/* CONTACT */
+.contact-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.6rem;
+}
+
+.contact-icon-btn {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: var(--text);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.06)),
+    rgba(10, 15, 31, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 26px rgba(8, 13, 28, 0.25);
+  backdrop-filter: blur(14px);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+.contact-icon-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.contact-icon-btn.is-phone {
+  color: #34d399;
+}
+
+.contact-icon-btn.is-whatsapp {
+  color: #25d366;
+}
+
+.contact-icon-btn.is-email {
+  color: #f59e0b;
+}
+
+.contact-icon-btn.is-linkedin {
+  color: #0a66c2;
+}
+
+.contact-icon-btn:hover {
+  transform: translateY(-2px);
+  border-color: rgba(110, 231, 255, 0.6);
+  box-shadow: 0 16px 32px rgba(34, 211, 238, 0.22);
+}
+
+.contact-tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(10, 15, 31, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--text);
+  font-size: 0.7rem;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  backdrop-filter: blur(10px);
+}
+
+.contact-icon-btn:hover .contact-tooltip,
+.contact-icon-btn:focus-visible .contact-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
 /* FOOTER */
 .footer {
   text-align: center;
