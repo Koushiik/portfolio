@@ -71,7 +71,7 @@ a {
     linear-gradient(135deg, #0a0f1f, #1b264c 55%, #0f172a);
   color: var(--text);
   padding: 4.5rem 0 5.5rem;
-  border-radius: 18px;
+  border-radius: 0 0 18px 18px;
 }
 
 .hero .container {
