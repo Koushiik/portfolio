@@ -40,6 +40,52 @@
     });
   });
 
+  const topNav = document.querySelector(".top-nav");
+  const navToggle = document.querySelector(".nav-toggle");
+
+  if (topNav && navToggle) {
+    const closeMenu = () => {
+      topNav.classList.remove("menu-open");
+      navToggle.setAttribute("aria-expanded", "false");
+    };
+
+    const openMenu = () => {
+      topNav.classList.add("menu-open");
+      navToggle.setAttribute("aria-expanded", "true");
+    };
+
+    navToggle.addEventListener("click", () => {
+      const isOpen = topNav.classList.contains("menu-open");
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!topNav.contains(event.target)) {
+        closeMenu();
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 1024) {
+        closeMenu();
+      }
+    });
+
+    topNav.querySelectorAll(".nav-links a[href^='#']").forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+  }
+
   const navLinks = Array.from(document.querySelectorAll(".nav-links a[href^='#']"));
   const sectionMap = navLinks
     .map((link) => {
