@@ -83,11 +83,11 @@
           <p class="eyebrow">
             Portfolio · Dhaka, Bangladesh · <span id="local-time" aria-live="polite"></span>
           </p>
-          <h1>Ariful Islam Koushik</h1>
-          <p class="subtitle">
+          <h1 id="hero-name">Ariful Islam Koushik</h1>
+          <p id="hero-subtitle" class="subtitle">
             Product Operations & Technical Operations Leader
           </p>
-          <p class="hero-text">
+          <p id="hero-text" class="hero-text">
             Building scalable systems, smooth workflows, and reliable operations.
           </p>
           <div class="hero-actions">
@@ -135,12 +135,12 @@
           <span class="section-icon" aria-hidden="true">✨</span>
           About Me
         </h2>
-        <p>
+        <p id="about-paragraph-1">
           I’m a Product Operations professional with 6+ years of experience
           managing large-scale systems, logistics, and technical operations.
           I enjoy turning complex operational problems into clear and scalable solutions.
         </p>
-        <p>
+        <p id="about-paragraph-2">
           I’ve launched instant delivery services, led warehouse automation,
           managed 24/7 technical operations, and worked closely with engineering
           teams to build practical, reliable systems.
@@ -342,25 +342,25 @@
           Get in Touch
         </h2>
         <div class="contact-icons">
-          <a class="contact-icon-btn is-phone" href="tel:+8801622486838" aria-label="Call phone">
+          <a id="contact-phone-link" class="contact-icon-btn is-phone" href="tel:+8801622486838" aria-label="Call phone">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
               <path d="M6.6 3.5h3.1c.6 0 1.1.4 1.2 1l.5 2.7c.1.6-.2 1.2-.7 1.5l-1.6.9a12.4 12.4 0 0 0 5.3 5.3l.9-1.6c.3-.5.9-.8 1.5-.7l2.7.5c.6.1 1 .6 1 1.2v3.1c0 .7-.6 1.3-1.3 1.3C10.9 19.7 4.3 13 4.3 5.8c0-.7.6-1.3 1.3-1.3z" />
             </svg>
             <span class="contact-tooltip">Phone</span>
           </a>
-          <a class="contact-icon-btn is-whatsapp" href="https://wa.me/8801622486838" target="_blank" rel="noreferrer" aria-label="WhatsApp chat">
+          <a id="contact-whatsapp-link" class="contact-icon-btn is-whatsapp" href="https://wa.me/8801622486838" target="_blank" rel="noreferrer" aria-label="WhatsApp chat">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
               <path d="M20.5 11.7a8.8 8.8 0 0 1-13 7.6L3 20l.8-4.3A8.8 8.8 0 1 1 20.5 11.7zm-4.4 3.1c-.2-.1-1.3-.7-1.5-.8-.2-.1-.4-.1-.6.1l-.6.7c-.2.2-.3.2-.6.1-1.2-.5-2.2-1.4-3-2.5-.2-.2 0-.4.1-.5l.4-.6c.1-.2.1-.4 0-.6l-.7-1.7c-.1-.3-.3-.3-.6-.3h-.6c-.2 0-.4.1-.5.3-.2.3-.7.9-.7 2.2 0 1.3.7 2.5.8 2.6.1.2 2 3.1 4.9 4.1.7.2 1.2.3 1.6.2.5-.1 1.3-.6 1.5-1.2.2-.6.2-1.1.1-1.2-.1-.1-.2-.2-.4-.3z" />
             </svg>
             <span class="contact-tooltip">WhatsApp</span>
           </a>
-          <a class="contact-icon-btn is-email" href="mailto:hello@koushik.bd" aria-label="Send email">
+          <a id="contact-email-link" class="contact-icon-btn is-email" href="mailto:hello@koushik.bd" aria-label="Send email">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
               <path d="M4.6 6.1h14.8c.6 0 1.1.5 1.1 1.1v9.7c0 .6-.5 1.1-1.1 1.1H4.6c-.6 0-1.1-.5-1.1-1.1V7.2c0-.6.5-1.1 1.1-1.1zm.8 2.2v8.1h13.2V8.3l-6.6 4.4-6.6-4.4zm.7-1.3l6 4 6-4H6.1z" />
             </svg>
             <span class="contact-tooltip">Email</span>
           </a>
-          <a class="contact-icon-btn is-linkedin" href="https://www.linkedin.com/in/ariful-islam-koushik/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
+          <a id="contact-linkedin-link" class="contact-icon-btn is-linkedin" href="https://www.linkedin.com/in/ariful-islam-koushik/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
             <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
               <path d="M6.5 9.1H3.6V20h2.9V9.1zm-1.4-4a1.7 1.7 0 1 0 0 3.4 1.7 1.7 0 0 0 0-3.4zM20.5 14c0-3-1.6-4.4-3.8-4.4-1.8 0-2.6 1-3.1 1.6V9.1H10.7V20h2.9v-6.1c0-1.6.3-3.2 2.3-3.2 2 0 2 1.9 2 3.3V20h2.9V14z" />
             </svg>
@@ -376,6 +376,7 @@
     <p>© <span id="year"></span> Ariful Islam Koushik</p>
   </footer>
 
+  <script src="content-config.js"></script>
   <script src="script.js"></script>
   </div>
 </body>

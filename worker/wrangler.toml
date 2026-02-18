@@ -1,0 +1,13 @@
+name = "portfolio-admin-api"
+main = "src/index.js"
+compatibility_date = "2026-02-18"
+account_id = "8fbda76ad9c9f43cb3009b99b6c21250"
+
+[vars]
+ALLOWED_ORIGIN = "https://koushik.bd"
+ALLOWED_ORIGINS = "https://koushik.bd,https://www.koushik.bd,https://koushiik.github.io"
+GITHUB_OWNER = "Koushiik"
+GITHUB_REPO = "portfolio"
+GITHUB_BRANCH = "main"
+CONTENT_PATH = "data/content.json"
+SESSION_TTL_SECONDS = "28800"

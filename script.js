@@ -1,5 +1,56 @@
 (() => {
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const contentDefaults = window.PORTFOLIO_CONTENT_DEFAULTS || {};
+
+  const setTextContent = (id, value) => {
+    const element = document.getElementById(id);
+    if (element && value) {
+      element.textContent = value;
+    }
+  };
+
+  const setLinkHref = (id, hrefValue) => {
+    const element = document.getElementById(id);
+    if (element && hrefValue) {
+      element.setAttribute("href", hrefValue);
+    }
+  };
+
+  const applyPortfolioContent = (content) => {
+    setTextContent("hero-name", content.heroName);
+    setTextContent("hero-subtitle", content.heroSubtitle);
+    setTextContent("hero-text", content.heroText);
+    setTextContent("about-paragraph-1", content.aboutParagraph1);
+    setTextContent("about-paragraph-2", content.aboutParagraph2);
+
+    if (content.phoneNumber) {
+      const normalizedPhone = String(content.phoneNumber).replace(/\s+/g, "");
+      setLinkHref("contact-phone-link", `tel:${normalizedPhone}`);
+      setLinkHref("contact-whatsapp-link", `https://wa.me/${normalizedPhone.replace(/^\+/, "")}`);
+    }
+
+    if (content.email) {
+      setLinkHref("contact-email-link", `mailto:${content.email}`);
+    }
+
+    setLinkHref("contact-linkedin-link", content.linkedinUrl);
+  };
+
+  const loadPortfolioContent = async () => {
+    try {
+      const response = await fetch("./data/content.json", {
+        headers: { Accept: "application/json" },
+        cache: "no-store"
+      });
+      if (!response.ok) throw new Error("Failed to load content");
+      const payload = await response.json();
+      applyPortfolioContent({ ...contentDefaults, ...(payload || {}) });
+    } catch (error) {
+      applyPortfolioContent({ ...contentDefaults });
+    }
+  };
+
+  loadPortfolioContent();
 
   const yearEl = document.getElementById("year");
   if (yearEl) {

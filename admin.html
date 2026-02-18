@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Admin Panel</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body>
+  <main class="admin-shell">
+    <header class="admin-header">
+      <h1>Portfolio Admin Panel</h1>
+      <p>Sign in with your admin password to update site content for all visitors.</p>
+    </header>
+
+    <form id="login-form" class="admin-form login-form">
+      <label>
+        Admin Password
+        <input id="admin-password" name="password" type="password" required autocomplete="off" />
+      </label>
+      <div class="admin-actions">
+        <button type="submit" class="btn-primary">Sign In</button>
+      </div>
+    </form>
+
+    <form id="admin-form" class="admin-form is-hidden">
+      <label>
+        Full Name
+        <input id="heroName" name="heroName" type="text" required />
+      </label>
+
+      <label>
+        Headline
+        <input id="heroSubtitle" name="heroSubtitle" type="text" required />
+      </label>
+
+      <label>
+        Hero Intro Text
+        <textarea id="heroText" name="heroText" rows="3" required></textarea>
+      </label>
+
+      <label>
+        About Paragraph 1
+        <textarea id="aboutParagraph1" name="aboutParagraph1" rows="4" required></textarea>
+      </label>
+
+      <label>
+        About Paragraph 2
+        <textarea id="aboutParagraph2" name="aboutParagraph2" rows="4" required></textarea>
+      </label>
+
+      <label>
+        Phone Number
+        <input id="phoneNumber" name="phoneNumber" type="text" required />
+      </label>
+
+      <label>
+        Email
+        <input id="email" name="email" type="email" required />
+      </label>
+
+      <label>
+        LinkedIn URL
+        <input id="linkedinUrl" name="linkedinUrl" type="url" required />
+      </label>
+
+      <div class="admin-actions">
+        <button type="submit" class="btn-primary">Save Changes</button>
+        <button type="button" id="reset-content" class="btn-secondary">Reset Defaults</button>
+        <button type="button" id="logout" class="btn-secondary">Log Out</button>
+        <a href="index.html" class="btn-link">Open Website</a>
+      </div>
+    </form>
+
+    <p id="status-text" class="status-text" aria-live="polite"></p>
+  </main>
+
+  <script src="content-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
