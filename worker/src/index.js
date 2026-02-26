@@ -141,16 +141,28 @@ const githubRequest = async (env, path, options = {}) => {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${env.GITHUB_TOKEN}`,
       "X-GitHub-Api-Version": "2022-11-28",
+      "User-Agent": "portfolio-admin-worker",
       ...(options.headers || {})
     },
     ...options
   });
 
-  const payload = await response.json().catch(() => ({}));
+  const raw = await response.text();
+  const payload = (() => {
+    try {
+      return raw ? JSON.parse(raw) : null;
+    } catch {
+      return null;
+    }
+  })();
   if (!response.ok) {
-    throw new Error(payload.message || "GitHub request failed");
+    const detail =
+      (payload && (payload.message || payload.error)) ||
+      (raw && raw.trim()) ||
+      `GitHub request failed (${response.status})`;
+    throw new Error(detail);
   }
-  return payload;
+  return payload || {};
 };
 
 const getContentMeta = async (env) =>
