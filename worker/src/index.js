@@ -207,67 +207,71 @@ const unauthorized = (corsHeaders) => createJsonResponse(401, { error: "Unauthor
 export default {
   async fetch(request, env) {
     const corsHeaders = getCorsHeaders(request, env);
-
-    if (request.method === "OPTIONS") {
-      return new Response(null, { status: 204, headers: corsHeaders });
-    }
-
-    if (request.method === "GET" && new URL(request.url).pathname === "/health") {
-      return createJsonResponse(200, { ok: true }, corsHeaders);
-    }
-
-    const path = new URL(request.url).pathname;
-
-    if (path === "/admin/login" && request.method === "POST") {
-      const body = await readJsonBody(request);
-      const password = typeof body.password === "string" ? body.password : "";
-      if (!env.ADMIN_PASSWORD || !env.SESSION_SECRET || !env.GITHUB_TOKEN) {
-        return createJsonResponse(500, { error: "Worker is missing required secrets" }, corsHeaders);
-      }
-      if (password !== env.ADMIN_PASSWORD) {
-        return createJsonResponse(401, { error: "Invalid password" }, corsHeaders);
+    try {
+      if (request.method === "OPTIONS") {
+        return new Response(null, { status: 204, headers: corsHeaders });
       }
 
-      const ttlSeconds = Number(env.SESSION_TTL_SECONDS || "28800");
-      const payload = { exp: Date.now() + ttlSeconds * 1000 };
-      const token = await signSessionToken(payload, env.SESSION_SECRET);
-      const response = createJsonResponse(200, { ok: true }, corsHeaders);
-      response.headers.set("Set-Cookie", sessionCookie(token, ttlSeconds));
-      return response;
-    }
+      if (request.method === "GET" && new URL(request.url).pathname === "/health") {
+        return createJsonResponse(200, { ok: true }, corsHeaders);
+      }
 
-    if (path === "/admin/session" && request.method === "GET") {
-      const authenticated = await isAuthorized(request, env);
-      return createJsonResponse(200, { authenticated }, corsHeaders);
-    }
+      const path = new URL(request.url).pathname;
 
-    if (path === "/admin/logout" && request.method === "POST") {
-      const response = createJsonResponse(200, { ok: true }, corsHeaders);
-      response.headers.set("Set-Cookie", clearSessionCookie());
-      return response;
-    }
+      if (path === "/admin/login" && request.method === "POST") {
+        const body = await readJsonBody(request);
+        const password = typeof body.password === "string" ? body.password : "";
+        if (!env.ADMIN_PASSWORD || !env.SESSION_SECRET || !env.GITHUB_TOKEN) {
+          return createJsonResponse(500, { error: "Worker is missing required secrets" }, corsHeaders);
+        }
+        if (password !== env.ADMIN_PASSWORD) {
+          return createJsonResponse(401, { error: "Invalid password" }, corsHeaders);
+        }
 
-    if (path === "/admin/content" && request.method === "GET") {
-      if (!(await isAuthorized(request, env))) return unauthorized(corsHeaders);
-      const meta = await getContentMeta(env);
-      const decoded = base64ToUtf8(meta.content.replace(/\n/g, ""));
-      const content = normalizeContent(JSON.parse(decoded));
-      return createJsonResponse(200, { content }, corsHeaders);
-    }
+        const ttlSeconds = Number(env.SESSION_TTL_SECONDS || "28800");
+        const payload = { exp: Date.now() + ttlSeconds * 1000 };
+        const token = await signSessionToken(payload, env.SESSION_SECRET);
+        const response = createJsonResponse(200, { ok: true }, corsHeaders);
+        response.headers.set("Set-Cookie", sessionCookie(token, ttlSeconds));
+        return response;
+      }
 
-    if (path === "/admin/content" && request.method === "PUT") {
-      if (!(await isAuthorized(request, env))) return unauthorized(corsHeaders);
-      const body = await readJsonBody(request);
-      const content = await updateContentFile(env, body.content || {}, "content: update portfolio data via admin panel");
-      return createJsonResponse(200, { content }, corsHeaders);
-    }
+      if (path === "/admin/session" && request.method === "GET") {
+        const authenticated = await isAuthorized(request, env);
+        return createJsonResponse(200, { authenticated }, corsHeaders);
+      }
 
-    if (path === "/admin/content/reset" && request.method === "POST") {
-      if (!(await isAuthorized(request, env))) return unauthorized(corsHeaders);
-      const content = await updateContentFile(env, DEFAULT_CONTENT, "content: reset portfolio data to defaults");
-      return createJsonResponse(200, { content }, corsHeaders);
-    }
+      if (path === "/admin/logout" && request.method === "POST") {
+        const response = createJsonResponse(200, { ok: true }, corsHeaders);
+        response.headers.set("Set-Cookie", clearSessionCookie());
+        return response;
+      }
 
-    return createJsonResponse(404, { error: "Not found" }, corsHeaders);
+      if (path === "/admin/content" && request.method === "GET") {
+        if (!(await isAuthorized(request, env))) return unauthorized(corsHeaders);
+        const meta = await getContentMeta(env);
+        const decoded = base64ToUtf8(meta.content.replace(/\n/g, ""));
+        const content = normalizeContent(JSON.parse(decoded));
+        return createJsonResponse(200, { content }, corsHeaders);
+      }
+
+      if (path === "/admin/content" && request.method === "PUT") {
+        if (!(await isAuthorized(request, env))) return unauthorized(corsHeaders);
+        const body = await readJsonBody(request);
+        const content = await updateContentFile(env, body.content || {}, "content: update portfolio data via admin panel");
+        return createJsonResponse(200, { content }, corsHeaders);
+      }
+
+      if (path === "/admin/content/reset" && request.method === "POST") {
+        if (!(await isAuthorized(request, env))) return unauthorized(corsHeaders);
+        const content = await updateContentFile(env, DEFAULT_CONTENT, "content: reset portfolio data to defaults");
+        return createJsonResponse(200, { content }, corsHeaders);
+      }
+
+      return createJsonResponse(404, { error: "Not found" }, corsHeaders);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unexpected server error";
+      return createJsonResponse(500, { error: message }, corsHeaders);
+    }
   }
 };
