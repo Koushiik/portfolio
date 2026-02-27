@@ -70,7 +70,7 @@ a {
     radial-gradient(circle at 15% 20%, rgba(248, 167, 255, 0.25), transparent 45%),
     linear-gradient(135deg, #0a0f1f, #1b264c 55%, #0f172a);
   color: var(--text);
-  padding: 4.5rem 0 5.5rem;
+  padding: clamp(2.2rem, 5vw, 4.5rem) 0 5.5rem;
   border-radius: 0 0 18px 18px;
 }
 
@@ -82,26 +82,28 @@ a {
 .top-nav {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1.5rem;
-  margin-bottom: 3.5rem;
+  margin-bottom: 1.75rem;
   position: relative;
 }
 
 .nav-links {
   display: grid;
-  gap: 1.25rem;
+  gap: 0.75rem;
   font-size: 0.95rem;
   color: var(--muted);
   position: absolute;
   top: calc(100% + 0.9rem);
-  left: 0;
   right: 0;
-  padding: 1rem;
+  width: min(260px, calc(100vw - 2.4rem));
+  padding: 0.85rem 1rem;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(10, 15, 31, 0.92);
-  backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 255, 0.28);
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.5), rgba(37, 30, 90, 0.34));
+  backdrop-filter: blur(18px) saturate(135%);
+  -webkit-backdrop-filter: blur(18px) saturate(135%);
+  box-shadow: 0 12px 26px rgba(4, 9, 24, 0.32), inset 0 1px 0 rgba(148, 163, 255, 0.14);
   opacity: 0;
   pointer-events: none;
   transform: translateY(-10px);
@@ -125,7 +127,7 @@ a {
   padding: 0 12px;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
   color: var(--text);
   cursor: pointer;
 }
@@ -152,6 +154,8 @@ a {
 }
 
 .nav-links a {
+  display: block;
+  padding: 0.3rem 0;
   position: relative;
 }
 
@@ -212,7 +216,7 @@ a {
 
 .hero-text {
   max-width: 640px;
-  margin: 1.5rem 0 2rem;
+  margin: 1.5rem auto 2rem;
   color: rgba(255, 255, 255, 0.85);
 }
 
@@ -224,6 +228,8 @@ a {
 
 .hero-copy {
   max-width: 640px;
+  margin-inline: auto;
+  text-align: center;
 }
 
 .hero-photo {
@@ -268,6 +274,7 @@ a {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .hero-stats {
@@ -537,6 +544,15 @@ a {
 }
 
 @media (min-width: 1024px) {
+  .hero {
+    padding-top: 4.5rem;
+  }
+
+  .top-nav {
+    justify-content: space-between;
+    margin-bottom: 3.5rem;
+  }
+
   .nav-toggle {
     display: none;
   }
@@ -547,6 +563,19 @@ a {
 
   .hero-photo {
     justify-content: flex-end;
+  }
+
+  .hero-copy {
+    margin-inline: 0;
+    text-align: left;
+  }
+
+  .hero-text {
+    margin: 1.5rem 0 2rem;
+  }
+
+  .hero-actions {
+    justify-content: flex-start;
   }
 
   .grid {
