@@ -25,7 +25,6 @@ body {
   line-height: 1.6;
   background: var(--light);
   overflow-x: hidden;
-  padding-bottom: 5rem;
 }
 
 a {
@@ -58,6 +57,14 @@ a {
 .bg-dark {
   background: var(--bg);
   color: var(--text);
+}
+
+#contact.section {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  border-radius: 18px 18px 0 0;
+  margin-bottom: 0;
 }
 
 .bg-dark a {
@@ -507,10 +514,12 @@ a {
 
 /* FOOTER */
 .footer {
+  width: 100%;
   text-align: center;
-  padding: 1.5rem;
+  padding: 1.85rem 1rem 5.4rem;
   font-size: 0.9rem;
-  color: #64748b;
+  color: rgba(233, 238, 252, 0.78);
+  background: #070b1a;
 }
 
 /* RESPONSIVE */
@@ -525,12 +534,12 @@ a {
 }
 
 @media (min-width: 1024px) {
-  body {
-    padding-bottom: 0;
-  }
-
   .quick-nav {
     display: none;
+  }
+
+  .footer {
+    padding: 1.5rem 1rem;
   }
 
   .hero {
