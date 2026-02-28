@@ -6,12 +6,62 @@ var DEFAULT_CONTENT = {
   heroName: "Ariful Islam Koushik",
   heroSubtitle: "Product Operations & Technical Operations Leader",
   heroText: "Building scalable systems, smooth workflows, and reliable operations.",
-  aboutParagraph1: "I\u2019m a Product Operations professional with 6+ years of experience managing large-scale systems, logistics, and technical operations. I enjoy turning complex operational problems into clear and scalable solutions.",
+  heroPrimaryButtonLabel: "Contact Me",
+  heroSecondaryButtonLabel: "View Projects",
+  heroResumeButtonLabel: "Download Resume",
+  aboutTitle: "About Me",
+  aboutParagraph1: "I\u2019m a Product Operations professional with 7+ years of experience managing large-scale systems, logistics, and technical operations. I enjoy turning complex operational problems into clear and scalable solutions.",
   aboutParagraph2: "I\u2019ve launched instant delivery services, led warehouse automation, managed 24/7 technical operations, and worked closely with engineering teams to build practical, reliable systems.",
+  skillsTitle: "Skills",
+  skillsCard1Title: "Product & Operations",
+  skillsCard1Items: "Product feature launches\nPRD preparation\nRoadmap execution\nStakeholder management\nAgile & Scrum collaboration",
+  skillsCard2Title: "Operations & Logistics",
+  skillsCard2Items: "Warehouse automation\nLast-mile delivery optimization\nInventory management\nProcess improvement",
+  skillsCard3Title: "Tools & Technology",
+  skillsCard3Items: "Microsoft 365 ecosystem\nPower Automate\nSharePoint\nAzure DevOps\nExcel, Word, PowerPoint",
+  skillsCard4Title: "Leadership",
+  skillsCard4Items: "Team recruitment & mentoring\nStaff training\nCross-functional coordination\nRoot-cause problem solving",
+  experienceTitle: "Experience",
+  experienceItem1Title: "Assistant Director, Product Operations",
+  experienceItem1Meta: "Chaldal PLC \xB7 Feb 2024 \u2013 Present",
+  experienceItem1Bullets: "Launched instant delivery with 10\u201315 minute fulfillment\nLed warehouse automation across 5+ sites\nOptimized last-mile delivery to reduce cost and time\nMentored product managers and built operational frameworks",
+  experienceItem2Title: "Manager, Technical Operations & Product Ops",
+  experienceItem2Meta: "Chaldal PLC \xB7 Jan 2022 \u2013 Jan 2024",
+  experienceItem2Bullets: "Managed 24/7 operations for 3 data centers\nLed server relocation and infrastructure setup\nRecruited and trained technical operations teams",
+  experienceItem3Title: "Executive & Associate, Technical Operations",
+  experienceItem3Meta: "Chaldal PLC \xB7 Jul 2019 \u2013 Jan 2022",
+  experienceItem3Bullets: "Handled critical technical escalations\nImproved internal support workflows\nMentored junior team members",
+  projectsTitle: "Projects",
+  project1Title: "Information Security Training",
+  project1Description: "Trained 2,200+ employees using a Train-the-Trainer model with 100% participation.",
+  project2Title: "Product Discoverability & Tagging",
+  project2Description: "Led metadata optimization for 12,000+ SKUs to improve search accuracy and conversion.",
+  project3Title: "Engineering Bootcamp",
+  project3Description: "Managed end-to-end logistics for a 110-person engineering bootcamp.",
+  blogTitle: "Blog Posts by Koushik",
+  blog1Title: "Building Reliable 24/7 Ops Teams",
+  blog1Description: "A practical playbook for staffing, escalation, and improvement loops in around-the-clock operations.",
+  blog1Url: "#",
+  blog1Body: "Running a 24/7 operations team is less about heroics and more about repeatable systems.\n\nAt Chaldal, we focused on three fundamentals: clear shift ownership, fast incident escalation, and tight feedback loops between operations and engineering.\n\nWhen those three are healthy, teams can handle pressure without burnout and customers still get a reliable experience.",
+  blog2Title: "Instant Delivery: What Makes It Work",
+  blog2Description: "Coming soon: Koushik is currently writing this post and will publish it soon.",
+  blog2Url: "#",
+  blog2Body: "",
+  blog3Title: "Warehouse Automation Without Chaos",
+  blog3Description: "Coming soon: Koushik is currently writing this post and will publish it soon.",
+  blog3Url: "#",
+  blog3Body: "",
+  educationTitle: "Education",
+  educationDegree: "Bachelor of Business Administration (BBA)",
+  educationInstitutionYears: "National University (2016 \u2013 2020)",
+  contactTitle: "Get in Touch",
   phoneNumber: "+8801622486838",
   email: "hello@koushik.bd",
-  linkedinUrl: "https://www.linkedin.com/in/ariful-islam-koushik/"
+  linkedinUrl: "https://www.linkedin.com/in/ariful-islam-koushik/",
+  footerName: "Ariful Islam Koushik"
 };
+var DEFAULT_UPDATE_COMMIT_MESSAGE = "content: update portfolio data via admin panel";
+var DEFAULT_RESET_COMMIT_MESSAGE = "content: reset portfolio data to defaults";
 var encoder = new TextEncoder();
 var decoder = new TextDecoder();
 var createJsonResponse = /* @__PURE__ */ __name((status, body, corsHeaders = {}) => new Response(JSON.stringify(body), {
@@ -97,6 +147,12 @@ var normalizeContent = /* @__PURE__ */ __name((raw = {}) => {
   });
   return out;
 }, "normalizeContent");
+var sanitizeCommitMessage = /* @__PURE__ */ __name((value, fallback) => {
+  if (typeof value !== "string") return fallback;
+  const normalized = value.replace(/\s+/g, " ").trim();
+  if (!normalized) return fallback;
+  return normalized.slice(0, 140);
+}, "sanitizeCommitMessage");
 var getAllowedOrigins = /* @__PURE__ */ __name((env) => {
   const list = String(env.ALLOWED_ORIGINS || "").split(",").map((item) => item.trim()).filter(Boolean);
   if (env.ALLOWED_ORIGIN && !list.includes(env.ALLOWED_ORIGIN)) {
@@ -228,12 +284,15 @@ var src_default = {
       if (path === "/admin/content" && request.method === "PUT") {
         if (!await isAuthorized(request, env)) return unauthorized(corsHeaders);
         const body = await readJsonBody(request);
-        const content = await updateContentFile(env, body.content || {}, "content: update portfolio data via admin panel");
+        const commitMessage = sanitizeCommitMessage(body.commitMessage, DEFAULT_UPDATE_COMMIT_MESSAGE);
+        const content = await updateContentFile(env, body.content || {}, commitMessage);
         return createJsonResponse(200, { content }, corsHeaders);
       }
       if (path === "/admin/content/reset" && request.method === "POST") {
         if (!await isAuthorized(request, env)) return unauthorized(corsHeaders);
-        const content = await updateContentFile(env, DEFAULT_CONTENT, "content: reset portfolio data to defaults");
+        const body = await readJsonBody(request);
+        const commitMessage = sanitizeCommitMessage(body.commitMessage, DEFAULT_RESET_COMMIT_MESSAGE);
+        const content = await updateContentFile(env, DEFAULT_CONTENT, commitMessage);
         return createJsonResponse(200, { content }, corsHeaders);
       }
       return createJsonResponse(404, { error: "Not found" }, corsHeaders);
@@ -285,7 +344,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-nSJKEf/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-Vmz9NG/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -317,7 +376,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-nSJKEf/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-Vmz9NG/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

@@ -32,6 +32,10 @@ a {
   text-decoration: none;
 }
 
+.is-hidden {
+  display: none !important;
+}
+
 .main-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -390,6 +394,7 @@ a {
 .blog-card {
   padding: 0;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .blog-card img {
@@ -412,6 +417,86 @@ a {
 
 .blog-card p {
   padding-bottom: 1.3rem;
+}
+
+.blog-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.blog-modal.is-hidden {
+  display: none;
+}
+
+.blog-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 15, 31, 0.72);
+  backdrop-filter: blur(4px);
+}
+
+.blog-modal__panel {
+  position: relative;
+  width: min(900px, 96vw);
+  max-height: min(90vh, 820px);
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 18px;
+  box-shadow: 0 30px 60px rgba(2, 6, 23, 0.35);
+  animation: rise 0.25s ease;
+}
+
+.blog-modal__close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.72);
+  color: #ffffff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.blog-modal__image {
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+  display: block;
+}
+
+.blog-modal__content {
+  padding: 1.35rem 1.35rem 1.5rem;
+}
+
+.blog-modal__summary {
+  margin-top: 0.8rem;
+  color: #334155;
+  font-weight: 600;
+}
+
+.blog-modal__body {
+  margin-top: 1rem;
+  color: #1e293b;
+  white-space: pre-wrap;
+  line-height: 1.75;
+}
+
+.blog-modal__body:empty::before {
+  content: "Full blog content is coming soon.";
+  color: #64748b;
+}
+
+.blog-modal__content .btn {
+  margin-top: 1.2rem;
+  display: inline-block;
 }
 
 /* EXPERIENCE */
@@ -634,6 +719,16 @@ a {
     color: var(--text);
     border-color: rgba(110, 231, 255, 0.55);
     background: rgba(110, 231, 255, 0.12);
+  }
+}
+
+@media (max-width: 640px) {
+  .blog-modal {
+    padding: 0.55rem;
+  }
+
+  .blog-modal__content {
+    padding: 1rem;
   }
 }
 
