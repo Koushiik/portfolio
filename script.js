@@ -76,6 +76,8 @@
   }
 
   const anchorLinks = document.querySelectorAll("a[href^='#']");
+  const getScrollOffset = () => (window.matchMedia("(min-width: 1024px)").matches ? 132 : 20);
+
   anchorLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
       const targetId = link.getAttribute("href");
@@ -83,9 +85,10 @@
       const target = document.querySelector(targetId);
       if (!target) return;
       event.preventDefault();
-      target.scrollIntoView({
+      const targetTop = target.getBoundingClientRect().top + window.scrollY - getScrollOffset();
+      window.scrollTo({
+        top: Math.max(targetTop, 0),
         behavior: prefersReducedMotion ? "auto" : "smooth",
-        block: "start",
       });
       history.pushState(null, "", targetId);
     });
@@ -94,31 +97,36 @@
   const navLinks = Array.from(
     document.querySelectorAll(".nav-links a[href^='#'], .quick-nav a[href^='#']")
   );
-  const sectionMap = navLinks
-    .map((link) => {
-      const id = link.getAttribute("href");
-      const section = id ? document.querySelector(id) : null;
-      return section ? { link, section } : null;
-    })
-    .filter(Boolean);
+  const sections = navLinks
+    .map((link) => link.getAttribute("href"))
+    .filter(Boolean)
+    .filter((value, index, values) => values.indexOf(value) === index)
+    .map((id) => ({ id, section: document.querySelector(id) }))
+    .filter(({ section }) => section);
 
-  if (sectionMap.length) {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            sectionMap.forEach(({ link, section }) => {
-              link.classList.toggle("active", section === entry.target);
-            });
-          }
-        });
-      },
-      {
-        rootMargin: "-35% 0px -55% 0px",
-        threshold: 0.1,
-      }
-    );
+  if (sections.length) {
+    const setActiveById = (activeId) => {
+      navLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === activeId);
+      });
+    };
 
-    sectionMap.forEach(({ section }) => observer.observe(section));
+    const updateActiveLink = () => {
+      const offsetFromTop = window.matchMedia("(min-width: 1024px)").matches ? 180 : 120;
+      const probeY = window.scrollY + offsetFromTop;
+
+      let currentId = sections[0].id;
+      sections.forEach(({ id, section }) => {
+        if (section.offsetTop <= probeY) {
+          currentId = id;
+        }
+      });
+
+      setActiveById(currentId);
+    };
+
+    updateActiveLink();
+    window.addEventListener("scroll", updateActiveLink, { passive: true });
+    window.addEventListener("resize", updateActiveLink);
   }
 })();

@@ -45,6 +45,7 @@ a {
 
 .section {
   padding: 4rem 0;
+  scroll-margin-top: 1.2rem;
   animation: rise 0.8s ease both;
   border-radius: 18px;
 }
@@ -534,6 +535,10 @@ a {
 }
 
 @media (min-width: 1024px) {
+  .section {
+    scroll-margin-top: 7.8rem;
+  }
+
   .quick-nav {
     display: none;
   }
