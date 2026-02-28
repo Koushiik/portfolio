@@ -203,15 +203,16 @@ const getCorsHeaders = (request, env) => {
 };
 
 const githubRequest = async (env, path, options = {}) => {
+  const { headers: optionHeaders = {}, ...requestOptions } = options;
   const response = await fetch(`https://api.github.com${path}`, {
+    ...requestOptions,
     headers: {
       Accept: "application/vnd.github+json",
       Authorization: `Bearer ${env.GITHUB_TOKEN}`,
       "X-GitHub-Api-Version": "2022-11-28",
       "User-Agent": "portfolio-admin-worker",
-      ...(options.headers || {})
-    },
-    ...options
+      ...optionHeaders
+    }
   });
 
   const raw = await response.text();
