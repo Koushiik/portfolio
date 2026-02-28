@@ -8,16 +8,44 @@
   const statusText = document.getElementById("status-text");
 
   if (!loginForm || !adminForm) return;
+  const loginSubmitButton = loginForm.querySelector("button[type='submit']");
+  const saveSubmitButton = adminForm.querySelector("button[type='submit']");
 
   const workerBaseUrl = String(cmsConfig.workerBaseUrl || "").replace(/\/+$/, "");
+  let loginPending = false;
+  let savePending = false;
+  let resetPending = false;
+  let logoutPending = false;
 
-  const setStatus = (message) => {
-    if (statusText) statusText.textContent = message;
+  const setStatus = (message, tone = "info") => {
+    if (!statusText) return;
+    statusText.textContent = message;
+    statusText.classList.remove("status-info", "status-success", "status-error");
+    statusText.classList.add(`status-${tone}`);
   };
 
   const setViewState = (authenticated) => {
     loginForm.classList.toggle("is-hidden", authenticated);
     adminForm.classList.toggle("is-hidden", !authenticated);
+  };
+
+  const setPendingState = (form, isPending) => {
+    Array.from(form.elements).forEach((field) => {
+      if (field instanceof HTMLElement) field.disabled = isPending;
+    });
+  };
+
+  const getErrorMessage = (error) => {
+    const raw = error instanceof Error ? error.message : "Unexpected error";
+    const normalized = String(raw).toLowerCase();
+    if (
+      normalized.includes("failed to fetch") ||
+      normalized.includes("networkerror") ||
+      normalized.includes("load failed")
+    ) {
+      return "Cannot reach worker API. Check worker URL, CORS origin, and whether wrangler dev is running.";
+    }
+    return raw;
   };
 
   const apiRequest = async (path, options = {}) => {
@@ -74,14 +102,19 @@
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    setStatus("");
+    if (loginPending) return;
+    setStatus("", "info");
 
     const passwordInput = loginForm.elements.namedItem("password");
     const password = passwordInput ? String(passwordInput.value).trim() : "";
     if (!password) {
-      setStatus("Password is required.");
+      setStatus("Password is required.", "error");
       return;
     }
+
+    loginPending = true;
+    setPendingState(loginForm, true);
+    if (loginSubmitButton) loginSubmitButton.textContent = "Signing In...";
 
     try {
       await apiRequest("/admin/login", {
@@ -91,81 +124,111 @@
       setViewState(true);
       await loadAdminContent();
       if (passwordInput) passwordInput.value = "";
-      setStatus("Signed in.");
+      setStatus("Signed in.", "success");
     } catch (error) {
-      setStatus(`Sign in failed: ${error.message}`);
+      setStatus(`Sign in failed: ${getErrorMessage(error)}`, "error");
+    } finally {
+      loginPending = false;
+      setPendingState(loginForm, false);
+      if (loginSubmitButton) loginSubmitButton.textContent = "Sign In";
     }
   });
 
   adminForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-    setStatus("");
+    if (savePending || resetPending || logoutPending) return;
+    setStatus("", "info");
+    savePending = true;
+    setPendingState(adminForm, true);
+    if (saveSubmitButton) saveSubmitButton.textContent = "Saving...";
 
     try {
       await apiRequest("/admin/content", {
         method: "PUT",
         body: JSON.stringify({ content: getFormPayload() })
       });
-      setStatus("Saved. GitHub Pages will publish the update shortly.");
+      setStatus("Saved. GitHub Pages will publish the update shortly.", "success");
     } catch (error) {
       if (error.message.toLowerCase().includes("unauthorized")) {
         setViewState(false);
       }
-      setStatus(`Save failed: ${error.message}`);
+      setStatus(`Save failed: ${getErrorMessage(error)}`, "error");
+    } finally {
+      savePending = false;
+      setPendingState(adminForm, false);
+      if (saveSubmitButton) saveSubmitButton.textContent = "Save Changes";
     }
   });
 
   if (resetButton) {
     resetButton.addEventListener("click", async () => {
-      setStatus("");
+      if (savePending || resetPending || logoutPending) return;
+      resetPending = true;
+      setStatus("", "info");
+      setPendingState(adminForm, true);
+      resetButton.textContent = "Resetting...";
       try {
         const payload = await apiRequest("/admin/content/reset", {
           method: "POST",
           body: JSON.stringify({})
         });
         populateForm({ ...contentDefaults, ...(payload.content || {}) });
-        setStatus("Defaults restored. GitHub Pages will publish shortly.");
+        setStatus("Defaults restored. GitHub Pages will publish shortly.", "success");
       } catch (error) {
         if (error.message.toLowerCase().includes("unauthorized")) {
           setViewState(false);
         }
-        setStatus(`Reset failed: ${error.message}`);
+        setStatus(`Reset failed: ${getErrorMessage(error)}`, "error");
+      } finally {
+        resetPending = false;
+        setPendingState(adminForm, false);
+        resetButton.textContent = "Reset Defaults";
       }
     });
   }
 
   if (logoutButton) {
     logoutButton.addEventListener("click", async () => {
+      if (savePending || resetPending || logoutPending) return;
+      logoutPending = true;
+      setPendingState(adminForm, true);
+      logoutButton.textContent = "Signing Out...";
       try {
         await apiRequest("/admin/logout", { method: "POST", body: JSON.stringify({}) });
       } catch {
         // Ignore logout errors in UI.
       } finally {
+        logoutPending = false;
+        setPendingState(adminForm, false);
+        logoutButton.textContent = "Log Out";
         setViewState(false);
-        setStatus("Signed out.");
+        setStatus("Signed out.", "success");
       }
     });
   }
 
   const initialize = async () => {
     if (!workerBaseUrl) {
-      setStatus("Worker URL is not configured.");
+      setStatus("Worker URL is not configured.", "error");
       setViewState(false);
       return;
     }
 
     try {
+      setStatus("Checking session...", "info");
       const session = await apiRequest("/admin/session", { method: "GET" });
       const authenticated = Boolean(session.authenticated);
       setViewState(authenticated);
       if (authenticated) {
         await loadAdminContent();
+        setStatus("Signed in.", "success");
       } else {
         populateForm(await loadPublicContent());
+        setStatus("Please sign in to edit content.", "info");
       }
     } catch (error) {
       setViewState(false);
-      setStatus(`Worker unavailable: ${error.message}`);
+      setStatus(`Worker unavailable: ${getErrorMessage(error)}`, "error");
       populateForm(await loadPublicContent());
     }
   };

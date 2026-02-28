@@ -11,6 +11,13 @@ window.PORTFOLIO_CONTENT_DEFAULTS = {
   linkedinUrl: "https://www.linkedin.com/in/ariful-islam-koushik/"
 };
 
-window.PORTFOLIO_CMS_CONFIG = {
-  workerBaseUrl: "https://portfolio-admin-api.koushik-admin-portal.workers.dev"
-};
+(() => {
+  const host = window.location.hostname;
+  const isLocalHost = host === "localhost" || host === "127.0.0.1";
+
+  window.PORTFOLIO_CMS_CONFIG = {
+    workerBaseUrl: isLocalHost
+      ? "http://localhost:8787"
+      : "https://portfolio-admin-api.koushik-admin-portal.workers.dev"
+  };
+})();
