@@ -84,6 +84,47 @@ The output goes to `dist/` (deploy that folder).
 npm run deploy:pages
 ```
 
+## GitHub Pages deploy flow
+
+This repo uses `develop` for source and `main` for Pages-ready output.
+
+### Deploy from develop to Pages (recommended)
+
+1. Work on `develop`, then commit and push:
+
+```bash
+git checkout develop
+git add -A
+git commit -m "your message"
+git push origin develop
+```
+
+2. Merge into `main`:
+
+```bash
+git checkout main
+git pull
+git merge develop
+```
+
+3. Build + publish (Pages serves `main` root):
+
+```bash
+npm run deploy:pages
+git add -A
+git commit -m "deploy: build for pages"
+git push origin main
+```
+
+### Local admin testing (develop branch)
+
+```bash
+cd worker
+wrangler dev --env develop
+```
+
+Make sure `public/data/content.json` exists in the `develop` branch on GitHub.
+
 Source locations:
 - Public site: `src/App.tsx`, `src/styles/site.css`
 - Admin: `src/AdminApp.tsx`, `src/adminLegacy.ts`, `src/styles/admin.css`
@@ -118,7 +159,7 @@ npm run dev
    - One logical change per commit (for easy rollback)
 
 6. Ship to production:
-   - If only frontend files changed, `git push` is enough (GitHub Pages)
+   - If only frontend files changed, follow the GitHub Pages deploy flow above
    - If Worker code/config changed (`worker/src/index.js`, `worker/wrangler.toml`, secrets), run:
 
 ```bash
