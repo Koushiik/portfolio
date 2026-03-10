@@ -29,10 +29,10 @@ wrangler secret put GITHUB_TOKEN
 wrangler deploy
 ```
 
-5. Copy deployed URL and set it in `content-config.js`:
+5. Copy deployed URL and set it in `src/contentConfig.ts`:
 
 ```js
-window.PORTFOLIO_CMS_CONFIG = {
+return {
   workerBaseUrl: "https://portfolio-admin-api.<your-subdomain>.workers.dev"
 };
 ```

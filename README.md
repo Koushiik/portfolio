@@ -4,9 +4,9 @@ Static portfolio on GitHub Pages with a Cloudflare Worker admin API.
 
 ## How content works
 
-- Public site reads content from `data/content.json`.
+- Public site reads content from `public/data/content.json`.
 - Admin panel sends password-authenticated requests to the Worker.
-- Worker updates `data/content.json` by committing to GitHub via API.
+- Worker updates `public/data/content.json` by committing to GitHub via API.
 - After save, GitHub Pages rebuilds and everyone sees updates.
 
 ## Deploy admin Worker
@@ -20,7 +20,7 @@ wrangler login
 
 2. Update `worker/wrangler.toml`:
    - `ALLOWED_ORIGIN` to your site origin
-   - `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BRANCH`, `CONTENT_PATH`
+   - `GITHUB_OWNER`, `GITHUB_REPO`, `GITHUB_BRANCH`, `CONTENT_PATH` (`public/data/content.json`)
 
 3. Set Worker secrets:
 
@@ -42,8 +42,8 @@ Secret guidance:
 wrangler deploy
 ```
 
-5. Copy deployed URL and set it in `content-config.js`:
-   - `PORTFOLIO_CMS_CONFIG.workerBaseUrl`
+5. Copy deployed URL and set it in `src/contentConfig.ts`:
+   - `getCmsConfig` `workerBaseUrl`
    - Full quick-start is also in `worker/DEPLOY.md`
 
 ## Admin usage
@@ -51,6 +51,37 @@ wrangler deploy
 1. Open `https://koushik.bd/admin.html`
 2. Enter `ADMIN_PASSWORD`
 3. Save/reset content
+
+## Frontend development (React)
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Start the dev server:
+
+```bash
+npm run dev
+```
+
+3. Open:
+   - Public site: `http://localhost:5173/`
+   - Admin: `http://localhost:5173/admin.html`
+
+4. Build for production:
+
+```bash
+npm run build
+```
+
+The output goes to `dist/` (deploy that folder).
+
+Source locations:
+- Public site: `src/App.tsx`, `src/styles/site.css`
+- Admin: `src/AdminApp.tsx`, `src/adminLegacy.ts`, `src/styles/admin.css`
+- Content defaults + CMS URL: `src/contentConfig.ts`
 
 ## Admin development workflow (recommended)
 
@@ -60,20 +91,27 @@ Use this flow when you are actively working on the admin panel for multiple days
 
 ```bash
 cd /home/mezbaul/projects/portfolio/worker
-wrangler dev
+wrangler dev --env develop
 ```
 
-2. Start local frontend (VS Code Go Live is fine) and open:
-   - `http://127.0.0.1:5500/admin.html`
+2. Start local frontend in another terminal:
 
-3. Build and test locally:
-   - Edit `admin.html`, `admin.css`, `admin.js` (and `worker/src/index.js` if needed)
+```bash
+npm install
+npm run dev
+```
+
+3. Open the admin UI:
+   - `http://localhost:5173/admin.html`
+
+4. Build and test locally:
+   - Edit `src/AdminApp.tsx`, `src/adminLegacy.ts`, `src/styles/admin.css`
    - Test sign in, save, reset, and logout
 
-4. Commit in small units:
+5. Commit in small units:
    - One logical change per commit (for easy rollback)
 
-5. Ship to production:
+6. Ship to production:
    - If only frontend files changed, `git push` is enough (GitHub Pages)
    - If Worker code/config changed (`worker/src/index.js`, `worker/wrangler.toml`, secrets), run:
 
@@ -82,17 +120,17 @@ cd /home/mezbaul/projects/portfolio/worker
 wrangler deploy
 ```
 
-6. Verify production after deploy/push:
+7. Verify production after deploy/push:
    - `https://koushik.bd/admin.html` login works
    - Save one small change
    - Confirm live site updates after Pages rebuild
 
 ### Notes for this repo
 
-- `content-config.js` now auto-selects API URL:
+- `src/contentConfig.ts` now auto-selects API URL:
   - Localhost/127.0.0.1 -> `http://localhost:8787`
   - Other hosts -> production Worker URL
-- Keep local origins in `worker/wrangler.toml` `ALLOWED_ORIGINS` for Go Live testing.
+- Keep local origins in `worker/wrangler.toml` `ALLOWED_ORIGINS` for Vite dev testing.
 
 ## Important note
 

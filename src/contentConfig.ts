@@ -1,4 +1,4 @@
-window.PORTFOLIO_CONTENT_DEFAULTS = {
+export const PORTFOLIO_CONTENT_DEFAULTS = {
   heroName: "Ariful Islam Koushik",
   heroSubtitle: "Product Operations & Technical Operations Leader",
   heroText: "Building scalable systems, smooth workflows, and reliable operations.",
@@ -67,15 +67,17 @@ window.PORTFOLIO_CONTENT_DEFAULTS = {
   email: "hello@koushik.bd",
   linkedinUrl: "https://www.linkedin.com/in/ariful-islam-koushik/",
   footerName: "Ariful Islam Koushik"
-};
+} satisfies Record<string, string>;
 
-(() => {
+export type PortfolioContent = { [K in keyof typeof PORTFOLIO_CONTENT_DEFAULTS]: string };
+
+export const getCmsConfig = () => {
   const host = window.location.hostname;
   const isLocalHost = host === "localhost" || host === "127.0.0.1";
 
-  window.PORTFOLIO_CMS_CONFIG = {
+  return {
     workerBaseUrl: isLocalHost
       ? "http://localhost:8787"
       : "https://portfolio-admin-api.koushik-admin-portal.workers.dev"
   };
-})();
+};
