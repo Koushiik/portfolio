@@ -78,6 +78,12 @@ npm run build
 
 The output goes to `dist/` (deploy that folder).
 
+5. If GitHub Pages is set to serve `main` root, run on `main`:
+
+```bash
+npm run deploy:pages
+```
+
 Source locations:
 - Public site: `src/App.tsx`, `src/styles/site.css`
 - Admin: `src/AdminApp.tsx`, `src/adminLegacy.ts`, `src/styles/admin.css`

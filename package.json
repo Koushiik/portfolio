@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy:pages": "bash -lc 'BRANCH=$(git rev-parse --abbrev-ref HEAD); if [ \"$BRANCH\" != \"main\" ]; then echo \"Run this on main branch.\"; exit 1; fi; npm run build && cp -R dist/* .'"
   },
   "dependencies": {
     "react": "^19.2.0",
