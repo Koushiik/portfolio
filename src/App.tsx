@@ -114,7 +114,7 @@ function App() {
       const offsetFromTop = window.matchMedia('(min-width: 1024px)').matches ? 180 : 120
       const probeY = window.scrollY + offsetFromTop
 
-      let currentId = NAV_SECTIONS[0]
+      let currentId: (typeof NAV_SECTIONS)[number] = NAV_SECTIONS[0]
       NAV_SECTIONS.forEach((id) => {
         const section = document.getElementById(id)
         if (section && section.offsetTop <= probeY) {
