@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 export const initAdmin = () => {
   if (window.__PORTFOLIO_ADMIN_INIT__) return
@@ -528,11 +529,15 @@ export const initAdmin = () => {
 
     switch (action) {
       case 'paragraph':
-        execCommandSafe('formatBlock', 'p') || execCommandSafe('formatBlock', '<p>')
+        if (!execCommandSafe('formatBlock', 'p')) {
+          execCommandSafe('formatBlock', '<p>')
+        }
         break
       case 'heading':
         if (format.includes('h2')) {
-          execCommandSafe('formatBlock', 'p') || execCommandSafe('formatBlock', '<p>')
+          if (!execCommandSafe('formatBlock', 'p')) {
+            execCommandSafe('formatBlock', '<p>')
+          }
         } else {
           applyHeadingFormat(surface, 2)
         }

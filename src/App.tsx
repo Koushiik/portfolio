@@ -338,8 +338,8 @@ function App() {
               <div className="card">
                 <h3 id="skills-card-1-title">{content.skillsCard1Title}</h3>
                 <ul id="skills-card-1-list">
-                  {splitLines(content.skillsCard1Items).map((item) => (
-                    <li key={item}>{item}</li>
+                  {splitLines(content.skillsCard1Items).map((item, index) => (
+                    <li key={`${item}-${index}`}>{item}</li>
                   ))}
                 </ul>
               </div>
@@ -347,8 +347,8 @@ function App() {
               <div className="card">
                 <h3 id="skills-card-2-title">{content.skillsCard2Title}</h3>
                 <ul id="skills-card-2-list">
-                  {splitLines(content.skillsCard2Items).map((item) => (
-                    <li key={item}>{item}</li>
+                  {splitLines(content.skillsCard2Items).map((item, index) => (
+                    <li key={`${item}-${index}`}>{item}</li>
                   ))}
                 </ul>
               </div>
@@ -356,8 +356,8 @@ function App() {
               <div className="card">
                 <h3 id="skills-card-3-title">{content.skillsCard3Title}</h3>
                 <ul id="skills-card-3-list">
-                  {splitLines(content.skillsCard3Items).map((item) => (
-                    <li key={item}>{item}</li>
+                  {splitLines(content.skillsCard3Items).map((item, index) => (
+                    <li key={`${item}-${index}`}>{item}</li>
                   ))}
                 </ul>
               </div>
@@ -365,8 +365,8 @@ function App() {
               <div className="card">
                 <h3 id="skills-card-4-title">{content.skillsCard4Title}</h3>
                 <ul id="skills-card-4-list">
-                  {splitLines(content.skillsCard4Items).map((item) => (
-                    <li key={item}>{item}</li>
+                  {splitLines(content.skillsCard4Items).map((item, index) => (
+                    <li key={`${item}-${index}`}>{item}</li>
                   ))}
                 </ul>
               </div>
@@ -387,8 +387,8 @@ function App() {
               <h3 id="experience-item-1-title">{content.experienceItem1Title}</h3>
               <span id="experience-item-1-meta">{content.experienceItem1Meta}</span>
               <ul id="experience-item-1-list">
-                {splitLines(content.experienceItem1Bullets).map((item) => (
-                  <li key={item}>{item}</li>
+                {splitLines(content.experienceItem1Bullets).map((item, index) => (
+                  <li key={`${item}-${index}`}>{item}</li>
                 ))}
               </ul>
             </div>
@@ -397,8 +397,8 @@ function App() {
               <h3 id="experience-item-2-title">{content.experienceItem2Title}</h3>
               <span id="experience-item-2-meta">{content.experienceItem2Meta}</span>
               <ul id="experience-item-2-list">
-                {splitLines(content.experienceItem2Bullets).map((item) => (
-                  <li key={item}>{item}</li>
+                {splitLines(content.experienceItem2Bullets).map((item, index) => (
+                  <li key={`${item}-${index}`}>{item}</li>
                 ))}
               </ul>
             </div>
@@ -407,8 +407,8 @@ function App() {
               <h3 id="experience-item-3-title">{content.experienceItem3Title}</h3>
               <span id="experience-item-3-meta">{content.experienceItem3Meta}</span>
               <ul id="experience-item-3-list">
-                {splitLines(content.experienceItem3Bullets).map((item) => (
-                  <li key={item}>{item}</li>
+                {splitLines(content.experienceItem3Bullets).map((item, index) => (
+                  <li key={`${item}-${index}`}>{item}</li>
                 ))}
               </ul>
             </div>

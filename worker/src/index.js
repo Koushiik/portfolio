@@ -270,10 +270,21 @@ const readJsonBody = async (request) => {
   }
 };
 
-const sessionCookie = (token, maxAgeSeconds) =>
-  `session=${encodeURIComponent(token)}; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=${maxAgeSeconds}`;
+const buildSessionCookie = (token, maxAgeSeconds, request) => {
+  const url = new URL(request.url);
+  const isSecure = url.protocol === "https:";
+  const sameSite = isSecure ? "None" : "Lax";
+  const secureFlag = isSecure ? "; Secure" : "";
+  return `session=${encodeURIComponent(token)}; HttpOnly; SameSite=${sameSite}; Path=/; Max-Age=${maxAgeSeconds}${secureFlag}`;
+};
 
-const clearSessionCookie = () => "session=; HttpOnly; Secure; SameSite=None; Path=/; Max-Age=0";
+const clearSessionCookie = (request) => {
+  const url = new URL(request.url);
+  const isSecure = url.protocol === "https:";
+  const sameSite = isSecure ? "None" : "Lax";
+  const secureFlag = isSecure ? "; Secure" : "";
+  return `session=; HttpOnly; SameSite=${sameSite}; Path=/; Max-Age=0${secureFlag}`;
+};
 
 const isAuthorized = async (request, env) => {
   const token = parseCookies(request).session;
@@ -312,7 +323,7 @@ export default {
         const payload = { exp: Date.now() + ttlSeconds * 1000 };
         const token = await signSessionToken(payload, env.SESSION_SECRET);
         const response = createJsonResponse(200, { ok: true }, corsHeaders);
-        response.headers.set("Set-Cookie", sessionCookie(token, ttlSeconds));
+        response.headers.set("Set-Cookie", buildSessionCookie(token, ttlSeconds, request));
         return response;
       }
 
@@ -323,7 +334,7 @@ export default {
 
       if (path === "/admin/logout" && request.method === "POST") {
         const response = createJsonResponse(200, { ok: true }, corsHeaders);
-        response.headers.set("Set-Cookie", clearSessionCookie());
+        response.headers.set("Set-Cookie", clearSessionCookie(request));
         return response;
       }
 

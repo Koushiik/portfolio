@@ -668,6 +668,11 @@ a {
     padding-bottom: 1.5rem;
   }
 
+  .footer-contact__inner {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: center;
+  }
+
   .hero {
     padding-top: 7.2rem;
   }
@@ -795,7 +800,3 @@ a {
     transition: none !important;
   }
 }
-  .footer-contact__inner {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    align-items: center;
-  }
